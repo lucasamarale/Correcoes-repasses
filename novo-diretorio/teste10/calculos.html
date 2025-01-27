@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> repasses do SUS</title>
+    
+    <link rel="stylesheet" type="text/css" href="style/base.css" />
+    
+    <script defer src="script/toggle_nav.js"></script>
+    <script defer src="script/csv_reader.js"></script>
+    <script defer src="script/table_renderer.js"></script>
+    <script type="module" defer src="script/main.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Correção monetária de repasses do SUS</h1>
+    </header>
+
+    <nav id="navbar">
+        <div id="toggleNavBtn">Menu</div>
+        <ul id="nav-list">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="filtros.html">Filtros</a></li>
+            <li><a href="#">Serviços</a></li>
+            <li><a href="calculo_avulso.html">Cálculo avulso</a></li>
+        </ul>
+    </nav>
+    
+    <div id="main">
+        <h2>Selecionar Arquivo CSV</h2>
+        <input type="file" id="fileInput" accept=".csv">
+        <button id="readFileBtn">Ler Arquivo</button>
+        <div id="tableContainer"></div> <!-- Container para a tabela -->
+        <canvas id="myChart" width="400" height="400"></canvas>
+        <button id="generatePdf">Gerar PDF</button>
+    </div>
+    
+    <footer>
+        <p>&copy; 2024 Projeto Leitor CSV</p>
+    </footer>
+</body>
+</html>

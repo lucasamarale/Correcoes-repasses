@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projeto com Bibliotecas</title>
+
+    <link rel="stylesheet" type="text/css" href="style/todo_original.css">
+    <link rel="stylesheet" type="text/css" href="style/todo.css" />
+    <link rel="stylesheet" type="text/css" href="style/base.css" />
+
+    <script defer src="script/toggle_nav.js"></script>
+    <script defer src="script/main.js"></script>
+
+    <style>
+        /* Estilo do para ler CSV, gerar gráfico e criar PDF vai aqui */
+    </style>
+
+</head>
+<body>
+    <header class="header">
+        <h1>Lista de tarefas</h1>
+        <input type="text" id="myInput" placeholder="Item...">
+        <span onclick="newElement()" class="addBtn">Adicionar</span>
+    </header>
+
+    <nav id="navbar">
+        <div onclick="toggleNav()">Menu</div>
+        <ul id="nav-list">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Sobre</a></li>
+            <li><a href="#">Serviços</a></li>
+            <li><a href="#">Contato</a></li>
+        </ul>
+    </nav>
+
+    <div id="main">
+        <ul id="do-list">
+            <li class="do">Código</li>
+            <li id="checked">Descrição</li>
+            <li class="do">SUS</li>
+            <li class="do">TUNEP</li>
+            <li class="do">Data do crédito</li>
+            <li class="do">Taxa de jurus</li>
+            <li class="do">Valor da atualização</li>
+            <li class="do">Valor total</li>
+          </ul>
+    </div>
+    
+    <footer>
+        <p>&copy; 2024 Meu Projeto</p>
+    </footer>
+    
+    <script>
+        /**
+     * Alterna a visibilidade da lista de navegação.
+     *
+     * Esta função verifica o estilo de exibição atual do elemento com id 'nav-list'
+     * e alterna entre 'block' e 'none', permitindo que o menu de navegação seja
+     * exibido ou oculto quando chamado.
+     *
+     * @function toggleNav
+     */
+    function toggleNav() {
+        const navList = document.getElementById('nav-list');
+        navList.style.display = navList.style.display === 'none' || navList.style.display === '' ? 'block' : 'none';
+    }
+
+    // Create a "close" button and append it to each list item
+    var myNodelist = document.getElementsByTagName("LI");
+    var i;
+    for (i = 0; i < myNodelist.length; i++) {
+        var span = document.createElement("SPAN");
+        var txt = document.createTextNode("\u00D7");
+        span.className = "close";
+        span.appendChild(txt);
+        myNodelist[i].appendChild(span);
+    }
+
+    // Click on a close button to hide the current list item
+    var close = document.getElementsByClassName("close");
+    var i;
+    for (i = 0; i < close.length; i++) {
+    close[i].onclick = function() {
+        var div = this.parentElement;
+        div.style.display = "none";
+    }
+    }
+
+    // Add a "checked" symbol when clicking on a list item
+    var list = document.querySelector('ul');
+    list.addEventListener('click', function(ev) {
+    if (ev.target.tagName === 'LI') {
+        ev.target.classList.toggle('checked');
+    }
+    }, false);
+
+    // Create a new list item when clicking on the "Add" button
+    function newElement() {
+    var li = document.createElement("li");
+    var inputValue = document.getElementById("myInput").value;
+    var t = document.createTextNode(inputValue);
+    li.appendChild(t);
+    if (inputValue === '') {
+        alert("You must write something!");
+    } else {
+        document.getElementById("myUL").appendChild(li);
+    }
+    document.getElementById("myInput").value = "";
+
+    var span = document.createElement("SPAN");
+    var txt = document.createTextNode("\u00D7");
+    span.className = "close";
+    span.appendChild(txt);
+    li.appendChild(span);
+
+    for (i = 0; i < close.length; i++) {
+        close[i].onclick = function() {
+        var div = this.parentElement;
+        div.style.display = "none";
+        }
+    }
+    } 
+</script>
+
+</body>
+</html>

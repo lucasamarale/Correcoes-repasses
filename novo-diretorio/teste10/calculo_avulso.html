@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> repasses do SUS</title>
+        
+        <link rel="stylesheet" type="text/css" href="style/base.css" />
+        <link rel="stylesheet" type="text/css" href="style/avulso.css" />
+        
+        <!--script defer src="script/leitor_csv.js"></script-->
+        <script defer src="script/toggle_nav.js"></script>
+        <script defer src="script/csv_reader.js"></script>
+        <script defer src="script/table_renderer.js"></script>
+        <script defer src="script/main.js"></script>
+
+        <script>
+            function calcularTotais() {
+                const linhas = document.querySelectorAll('tbody tr');
+                linhas.forEach(linha => {
+                    const preco = parseFloat(linha.querySelector('.preco').value) || 0;
+                    const quantidade = parseFloat(linha.querySelector('.quantidade').value) || 0;
+                    const total = preco * quantidade;
+                    linha.querySelector('.total').textContent = total.toFixed(2);
+                });
+            }
+        </script>
+</head>
+<body>
+    <header>
+        <h1>Correção monetária de repasses do SUS</h1>
+    </header>
+
+    <nav id="navbar">
+        <div onclick="toggleNav()">Menu</div>
+        <ul id="nav-list">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="filtros.html">Filtros</a></li>
+            <li><a href="#">Serviços</a></li>
+            <li><a href="calculo_avulso.html">Cálculo avulso</a></li>
+        </ul>
+    </nav>
+    <table>
+        <thead>
+            <tr>
+                <th>Mês do Crédito</th>
+                <th>Diferença devida e não paga (R$)</th>
+                <th>Fator de Atualização do CJF até Dez/2021</th>
+                <th>Valor Atualizado Em Dez/2021 (R$)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>01/05/16</td>
+                <td><input type="number" class="preco" oninput="calcularTotais()"></td>
+                <td><input type="number" class="quantidade" oninput="calcularTotais()"></td>
+                <td class="total">0.00</td>
+            </tr>
+            <tr>
+                <td>01/06/16</td>
+                <td><input type="number" class="preco" oninput="calcularTotais()"></td>
+                <td><input type="number" class="quantidade" oninput="calcularTotais()"></td>
+                <td class="total">0.00</td>
+            </tr>
+            <!-- Adicione mais linhas conforme necessário -->
+        </tbody>
+    </table>
+</body>
+</html>

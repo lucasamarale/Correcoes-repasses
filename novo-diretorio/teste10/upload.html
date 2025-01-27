@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projeto com Paginação</title>
+    
+    <link rel="stylesheet" type="text/css" href="style/base.css" />
+
+    <!-- Inclusão do PapaParse -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+    <style>
+        /* Estilos básicos */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+
+        .pagination {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .pagination button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        .pagination button.active {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        #tableContainer {
+            margin: 20px auto;
+            width: 90%;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Correção Monetária de Repasses do SUS</h1>
+    </header>
+
+    <main>
+        <h2>Selecionar Arquivo CSV</h2>
+        <input type="file" id="fileInput" accept=".csv">
+        <button id="readFileBtn">Ler Arquivo</button>
+        <div id="tableContainer"></div>
+        <div class="pagination" id="paginationControls"></div> <!-- Controles de paginação -->
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 Meu Projeto</p>
+    </footer>
+
+    <script>
+        let currentPage = 1; // Página inicial
+        const recordsPerPage = 50; // Registros por página
+        let globalData = []; // Dados globais para manter todas as páginas
+
+        document.getElementById('readFileBtn').addEventListener('click', () => {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+
+            if (file) {
+                Papa.parse(file, {
+                    header: true, // Utiliza a primeira linha como cabeçalho
+                    complete: function(results) {
+                        globalData = results.data.filter(row => Object.values(row).some(val => val)); // Remove linhas vazias
+                        currentPage = 1; // Reinicia na primeira página
+                        renderPage(); // Renderiza a página inicial
+                    },
+                    skipEmptyLines: true
+                });
+            } else {
+                alert('Por favor, selecione um arquivo.');
+            }
+        });
+
+        /**
+         * Renderiza a página atual da tabela com base nos dados e no índice da página.
+         */
+        function renderPage() {
+            const startIndex = (currentPage - 1) * recordsPerPage;
+            const endIndex = startIndex + recordsPerPage;
+            const pageData = globalData.slice(startIndex, endIndex); // Obtém os dados da página atual
+            renderTable(pageData); // Renderiza a tabela
+            renderPaginationControls(); // Atualiza os controles de paginação
+        }
+
+        /**
+         * Renderiza os dados em uma tabela HTML dentro do contêiner especificado.
+         * @param {Array<Object>} data - Dados a serem exibidos na tabela.
+         */
+        function renderTable(data) {
+            const container = document.getElementById('tableContainer');
+            container.innerHTML = ''; // Limpa o contêiner antes de adicionar a nova tabela
+
+            const table = document.createElement('table');
+            const headerRow = document.createElement('tr');
+
+            // Cria o cabeçalho com base nas chaves do primeiro registro
+            Object.keys(data[0] || {}).forEach(key => {
+                const th = document.createElement('th');
+                th.textContent = key;
+                headerRow.appendChild(th);
+            });
+            table.appendChild(headerRow);
+
+            // Preenche a tabela com as linhas de dados
+            data.forEach(row => {
+                const dataRow = document.createElement('tr');
+                Object.values(row).forEach(value => {
+                    const td = document.createElement('td');
+                    td.textContent = value || '-'; // Substitui valores vazios por "-"
+                    dataRow.appendChild(td);
+                });
+                table.appendChild(dataRow);
+            });
+
+            container.appendChild(table); // Adiciona a tabela ao contêiner
+        }
+
+        /**
+         * Renderiza os controles de paginação no contêiner designado.
+         */
+        function renderPaginationControls() {
+            const paginationControls = document.getElementById('paginationControls');
+            paginationControls.innerHTML = ''; // Limpa os controles anteriores
+
+            const totalPages = Math.ceil(globalData.length / recordsPerPage);
+
+            for (let i = 1; i <= totalPages; i++) {
+                const button = document.createElement('button');
+                button.textContent = i;
+                button.className = i === currentPage ? 'active' : '';
+                button.addEventListener('click', () => {
+                    currentPage = i;
+                    renderPage(); // Re-renderiza a página ao clicar no botão
+                });
+                paginationControls.appendChild(button);
+            }
+        }
+    </script>
+</body>
+</html>
